@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
+
+<style>
+    .logo {
+        background-image: url(https://www.bynder.com/static/3.0/dist/img/svg/glyph.svg);
+        background-repeat: no-repeat;
+        background-color: #00AAFF;
+        width: 25px;
+        height: 25px;
+    }
+</style>
+
+
+<body>
+    <div class="logo"></div>
+    <div id="bynder-compactview" data-assetTypes="image,video" data-autoload="false" data-button="Open Compact View" data-collections="true"
+        data-folder="bynder-compactview" data-fullScreen="false" data-header="true" data-language="en_US" data-mode="multi" data-zindex="300">
+    </div>
+
+    <div id="importedAssets"></div>
+
+    <script src="https://d8ejoa1fys2rk.cloudfront.net/modules/compactview/includes/js/client-1.1.0.min.js"></script>
+
+
+    <script>
+        window.contentfulExtension.init(function (api) {
+            //  console.log(api.field.getValue() + 'Hello');
+
+            api.window.updateHeight(500)
+
+            document.addEventListener('BynderAddMedia', function (e) {
+                // The selected assets go in the event detail property
+                var selectedAssets = e.detail;
+
+                var importedAssetsContainer = document.getElementById('importedAssets');
+                importedAssetsContainer.innerHTML = '';
+
+                var asset;
+                for (var i = 0; i < selectedAssets.length; i++) {
+                    asset = selectedAssets[i];
+                    switch (asset.type) {
+                        case 'image':
+                            importedAssetsContainer.innerHTML += '<img src=' + asset.thumbnails['webimage'] + ' />';
+                            break;
+                        case 'video':
+                            importedAssetsContainer.innerHTML += (
+                                '<video width="640" height="480" controls>' +
+                                '<source src="' + asset.videoPreviewURLs.filter(
+                                    function (url) { return url.match(/mp4$/) }
+                                )[0] + '" type="video/mp4">' +
+                                '</video>'
+                            )
+                            break;
+                    }
+                }
+            });
+
+        });
+    </script>
+
+
+
+
+</body>
