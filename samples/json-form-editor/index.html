@@ -24,9 +24,13 @@
              afterInputReady: function (input) {
                  input.cfFormField = input.cfFormField || this.closest(input, '.cf-form-field');
              },
-             getButton: el(function (el, text, icon, title) {
+             getButton: function (text, icon, title) {
+                 var el = document.createElement('button');
+                 el.type = 'button';
                  el.className = text.match(/save/i) ? 'cf-btn-primary' : 'cf-btn-secondary';
-             }),
+                 this.setButtonText(el,text,icon,title);
+                 return el;
+             },
              getHeader: el(function (el, text) {
                  if (!(text instanceof HTMLElement)) {
                      var label = document.createElement('span');
